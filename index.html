@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elo Rating</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 1rem;
+            color: #333;
+        }
+
+        #playerContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .player {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+            width: 200px;
+            text-align: center;
+        }
+
+        .player:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.02);
+        }
+
+        .player h2 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .player p {
+            margin-top: 0;
+            color: #666;
+        }
+
+        .winner {
+            background-color: #4CAF50 !important;
+            color: white;
+        }
+
+        .loser {
+            background-color: #e74c3c !important;
+            color: white;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            font-size: 20px;
+            font-weight: bold;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.02);
+        }
+
+        button:active {
+            background-color: #21618C;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="title">
+        Elo Rating Calculator
+    </h1>
+
+    <div>
+        <div id="playerContainer"></div>
+        <button id="submit">Submit</button>
+    </div>
+
+    <script>
+        let players = [];
+        let winner;
+        let loser;
+        let selectionMode = "winner";
+
+        const resetWinner = () => {
+            winner = undefined;
+
+            document.getElementById("playerContainer").childNodes.forEach((playerElement) => {
+                playerElement.classList.remove("winner");
+            });
+        }
+
+        const resetLoser = () => {
+            loser = undefined;
+
+            document.getElementById("playerContainer").childNodes.forEach((playerElement) => {
+                playerElement.classList.remove("loser");
+            });
+        }
+
+        const reset = () => {
+            resetWinner();
+            resetLoser();
+        }
+
+
+        const loadPlayers = () => {
+            return [{ name: "Tim", rating: 1000 }, { name: "Klaus", rating: 1000 }, { name: "Michael", rating: 1000 }, { name: "Mikka", rating: 999 }];
+        }
+
+        players = loadPlayers();
+
+        const playerContainer = document.getElementById("playerContainer");
+        players.forEach(element => {
+            const playerElement = document.createElement("div");
+            playerElement.classList.add("player");
+
+            const playerName = document.createElement("h2");
+            playerName.textContent = element.name;
+
+            const playerRating = document.createElement("p");
+            playerRating.textContent = element.rating;
+
+            playerElement.appendChild(playerName);
+            playerElement.appendChild(playerRating);
+
+            playerElement.onclick = (ev) => {
+                if (selectionMode === "winner") {
+                    resetWinner();
+                    if (loser === element.name) {
+                        resetLoser();
+                    }
+
+                    winner = element.name;
+                    playerElement.classList.add("winner")
+                    selectionMode = "loser";
+                } else {
+                    resetLoser();
+                    if (winner === element.name) {
+                        resetWinner();
+                    }
+
+                    loser = element.name;
+                    playerElement.classList.add("loser")
+                    selectionMode = "winner";
+                }
+            }
+
+            playerContainer.appendChild(playerElement);
+        });
+
+        const submit = () => {
+            if (!winner || !loser) return;
+
+            console.log("submitted");
+            reset();
+        }
+
+        document.body.onkeypress = (ev) => {
+            if (ev.key === "Enter") {
+                submit();
+            }
+        }
+
+        document.getElementById("submit").onclick = (ev) => {
+            submit();
+        }
+        const titles = [
+            "SkillScore Pro",
+            "RankMaster 9000",
+            "Competitive Skill Index",
+            "GameRank Evaluator",
+            "VictoryMetrics Hub",
+            "SkillForge Analytics",
+            "GameMastery Insights",
+            "StrategiRater Elite",
+            "ProSkill Analyzer",
+            "VictoryVector Pro"
+        ];
+
+        const randomIndex = Math.floor(Math.random() * titles.length);
+        const randomTitle = titles[randomIndex];
+
+        document.title = randomTitle;
+        document.getElementById("title").textContent = randomTitle;
+    </script>
+</body>
+
+</html>
