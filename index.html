@@ -121,6 +121,8 @@
     </div>
 
     <script>
+      const loadPlayersUrl = "https://n6mr2kuwhbpgjzkqdh4zog4uny0qmcro.lambda-url.eu-central-1.on.aws/";
+      const saveRatingUrl = "https://cyeb2c2k6rph5ejbwhyhyndiay0itefp.lambda-url.eu-central-1.on.aws/";
       const main = async () => {
         let players = [];
         let winner;
@@ -128,9 +130,7 @@
         let selectionMode = "winner";
 
         const loadPlayers = async () => {
-          const players = await fetch(
-            "https://yc5wq4pifoc7yh4jt5z223pbwa0wlguj.lambda-url.eu-north-1.on.aws/"
-          );
+          const players = await fetch(loadPlayersUrl);
           const data = await players.json();
           return data;
         };
@@ -207,8 +207,7 @@
 
           console.log("submitted");
 
-          const response = await fetch(
-            "https://db7zg7ind6ll5bpkow3zflgds40pnikv.lambda-url.eu-north-1.on.aws/",
+          const response = await fetch(saveRatingUrl,          
             {
               method: "POST",
               body: JSON.stringify({ player1: winner, player2: loser }),
