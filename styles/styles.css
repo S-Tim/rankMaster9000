@@ -1,103 +1,118 @@
 body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
-    text-align: center;
-    margin-top: 1rem;
-    color: #333;
+  text-align: center;
+  margin-top: 1rem;
+  color: #333;
 }
 
 #content-container {
-    max-width: max-content;
-    padding-left: 1rem;
-    padding-right: 1rem;
+  max-width: max-content;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 #playerContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .player {
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out,
-        transform 0.1s ease-in-out;
-    width: 200px;
-    text-align: center;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+  width: 200px;
+  text-align: center;
 }
 
 .player:hover {
-    background-color: #f0f0f0;
-    transform: scale(1.02);
+  background-color: #f0f0f0;
+  transform: scale(1.02);
 }
 
 .player h2 {
-    margin-bottom: 0.5rem;
-    color: #333;
+  margin-bottom: 0.5rem;
+  color: #333;
 }
 
 .player p {
-    margin-top: 0;
-    color: #666;
+  margin-top: 0;
+  color: #666;
 }
 
 .player.winner p,
 .player.loser p,
 .player.winner h2,
 .player.loser h2 {
-    color: white;
+  color: white;
 }
 
 .winner {
-    background-color: #4caf50 !important;
-    color: white;
+  background-color: #4caf50 !important;
+  color: white;
 }
 
 .winner:hover {
-    background-color: #27ae60 !important;
+  background-color: #27ae60 !important;
 }
 
 .loser {
-    background-color: #e74c3c !important;
-    color: white;
+  background-color: #e74c3c !important;
+  color: white;
 }
 
 .loser:hover {
-    background-color: #c0392b !important;
+  background-color: #c0392b !important;
 }
 
 button {
-    margin-top: 1rem;
-    padding: 1rem 2rem;
-    font-size: 20px;
-    font-weight: bold;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out,
-        transform 0.1s ease-in-out;
-    width: 100%;
+  margin-top: 1rem;
+  padding: 1rem 2rem;
+  font-size: 20px;
+  font-weight: bold;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+  width: 100%;
 }
 
 button:hover {
-    background-color: #2980b9;
-    transform: scale(1.02);
+  background-color: #2980b9;
+  transform: scale(1.02);
 }
 
 button:active {
-    background-color: #21618c;
+  background-color: #21618c;
+}
+
+.rating-difference {
+  margin-left: 0.5rem;
+  transition: transform 0.5s;
+}
+
+.text-green {
+  color: green;
+}
+
+.text-red {
+  color: red;
+}
+
+.hidden {
+  display: none;
 }
