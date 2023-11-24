@@ -1,4 +1,9 @@
 import sys
+import json
+import boto3
+
+BUCKET_NAME = "rankmaster9000"
+FILENAME = "ratings.json"
 
 
 def win_probability(ratingA, ratingB):
@@ -21,56 +26,74 @@ def adjust_ratings(ratingA, ratingB, scoreA):
 
 
 def load_ratings():
-    with open("ratings.txt") as f:
-        lines = f.read().splitlines()
-        lines = [line.split(",") for line in lines]
-        ratings = {line[0]: int(line[1]) for line in lines}
+    s3_client = boto3.client("s3")
+    ratings_object = s3_client.get_object(Bucket=BUCKET_NAME, Key=FILENAME)
+    content = ratings_object["Body"].read().decode("utf-8")
+    ratings = json.loads(content)
     return ratings
 
 
-def save_ratings():
-    with open("ratings.txt", "w") as f:
-        lines = [f"{name},{rating}" for name, rating in ratings.items()]
-        f.write("\n".join(lines))
+def save_ratings(ratings):
+    s3_client = boto3.client("s3")
+    ratings_json = json.dumps(ratings).encode("utf-8")
+    s3_client.put_object(Body=ratings_json, Bucket=BUCKET_NAME, Key=FILENAME)
 
 
-if __name__ == "__main__":
+def parse_payload(payload):
+    loaded = json.loads(payload)
+    return (loaded["player1"], loaded["player2"])
+
+
+def lambda_handler(event, context):
+    player1, player2 = parse_payload(event["body"])
+
     ratings = load_ratings()
 
-    if len(sys.argv) == 1:
-        sorted_ratings = sorted(
-            ratings.items(), key=lambda entry: entry[1], reverse=True
-        )
-        for player, rating in sorted_ratings:
-            print(f"{player}, {rating}")
-        exit()
-
-    if len(sys.argv) != 3:
-        print("Please provide the players as arguments in the form: 'winner loser'")
-        exit()
-
-    player1 = sys.argv[1]
-    player2 = sys.argv[2]
-
     if player1 not in ratings:
-        print(f"Player {player1} could not be found")
-        exit()
+        return {
+            "statusCode": 404,
+            "body": json.dumps({"message": f"Player {player1} could not be found"}),
+        }
 
     if player2 not in ratings:
-        print(f"Player {player2} could not be found")
-        exit()
+        return {
+            "statusCode": 404,
+            "body": json.dumps({"message": f"Player {player2} could not be found"}),
+        }
 
-    print(f"{sys.argv[1]} vs. {sys.argv[2]}")
     win_probabilities = [
         round(prob, 2) for prob in win_probability(ratings[player1], ratings[player2])
     ]
-    print(f"Win probabilities: {win_probabilities[0]}, {win_probabilities[1]}")
-    print(f"Previous ratings:  {ratings[player1]}, {ratings[player2]}")
 
     adjustedA, adjustedB = adjust_ratings(ratings[player1], ratings[player2], 1)
     ratings[player1] = adjustedA
     ratings[player2] = adjustedB
 
-    print(f"New ratings:       {ratings[player1]}, {ratings[player2]}")
+    save_ratings(ratings)
 
-    save_ratings()
+    return {
+        "statusCode": 200,
+        "body": json.dumps(
+            [
+                {"name": player1, "rating": ratings[player1]},
+                {"name": player2, "rating": ratings[player2]},
+            ]
+        ),
+    }
+
+
+def lambda_handler_show_ratings(event, context):
+    ratings = load_ratings()
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(
+            [{"name": name, "rating": rating} for (name, rating) in ratings.items()]
+        ),
+    }
+
+
+event = {"body": '{"player1": "Klaus", "player2": "Tim"}'}
+print(lambda_handler_show_ratings(None, None))
+lambda_handler(event, None)
+print(lambda_handler_show_ratings(None, None))
