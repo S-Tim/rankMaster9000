@@ -2,7 +2,7 @@ import sys
 import json
 import boto3
 
-BUCKET_NAME = "rankmaster9000"
+BUCKET_NAME = "rankmaster9001"
 FILENAME = "ratings.json"
 
 
@@ -84,12 +84,15 @@ def lambda_handler(event, context):
 
 def lambda_handler_show_ratings(event, context):
     ratings = load_ratings()
+    mapped_ratings = sorted(
+        [{"name": name, "rating": rating} for (name, rating) in ratings.items()],
+        key=lambda entry: entry["rating"],
+        reverse=True,
+    )
 
     return {
         "statusCode": 200,
-        "body": json.dumps(
-            [{"name": name, "rating": rating} for (name, rating) in ratings.items()]
-        ),
+        "body": json.dumps(mapped_ratings),
     }
 
 
