@@ -138,7 +138,8 @@ const main = async () => {
     let oldRating = players.find((p) => p.name === player.name).rating;
     let ratingDifference = player.rating - oldRating;
 
-    const totalAnimationDuration = 2000;
+    const totalAnimationDuration = 600;
+    const animationDelay = 600;
     const animationDurationPerFrame = totalAnimationDuration / Math.abs(ratingDifference);
     players = players.map((p) => (p.name === player.name ? player : p));
     const playerRating = document.getElementById(player.name + "-rating");
@@ -167,7 +168,7 @@ const main = async () => {
       }
     };
 
-    makeRatingCountdown();
+    setTimeout(makeRatingCountdown, animationDelay)
   };
 };
 
