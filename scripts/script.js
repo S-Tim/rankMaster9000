@@ -168,8 +168,25 @@ const main = async () => {
       }
     };
 
-    setTimeout(makeRatingCountdown, animationDelay)
+    setTimeout(makeRatingCountdown, animationDelay);
+    createFirework();
   };
 };
+
+function createFirework(){
+  let pyro = document.createElement("div");
+  pyro.classList.add("pyro");
+
+  let before = document.createElement("div");
+  before.classList.add("before");
+  let after = document.createElement("div");
+  after.classList.add("after");
+
+  pyro.appendChild(before);
+  pyro.appendChild(after);
+
+  pyro.addEventListener("animationend", () => pyro.remove());
+  document.getElementById("firework-container").appendChild(pyro);
+}
 
 main();
